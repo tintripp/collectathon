@@ -5,7 +5,7 @@ WIN_FLAGS=""
 
 RUN=false
 
-INPUT="$(find src -name '*.c')"
+INPUT="$(find src -type f \( -name '*.c' -o -name '*.cpp' \))"
 OUTPUT="a"
 RAYLIB="$HOME/raylib"
 
@@ -61,7 +61,7 @@ mkdir -p "$BUILD_DIR"
 if [ "$WINDOWS" = true ]; then
     BUILD_DIR="$BUILD_DIR/win32/"
 else
-    BUILD_DIR="$BUILD_DIR/bin/"
+    BUILD_DIR="$BUILD_DIR/unix/"
 fi
 
 DEST="$BUILD_DIR/$RES"
@@ -76,7 +76,8 @@ if [ "$WINDOWS" = true ]; then
         -I"$RAYLIB/src" \
         "$RAYLIB/build-mingw/raylib/libraylib.a" \
         -lopengl32 -lgdi32 -lwinmm $WIN_FLAGS \
-        -o "$BUILD_DIR/$OUTPUT"
+        -o "$BUILD_DIR/$OUTPUT" \
+        -static -static-libgcc -static-libstdc++
 else
     g++ $INPUT \
         -I"$RAYLIB/src" \
